@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>牛马上班倒计时</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        h1 {
+            color: #4a4a4a;
+            margin: 0;
+            font-size: 24px;
+            line-height: 1.2;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .input-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .input-group h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        input {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .countdown-container {
+            margin: 30px 0;
+        }
+        
+        .countdown-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .time-block {
+            width: 30%;
+            background-color: #f1f8ff;
+            border-radius: 10px;
+            padding: 15px 0;
+        }
+        
+        .hours {
+            background-color: #e0f7fa;
+        }
+        
+        .minutes {
+            background-color: #e8f5e9;
+        }
+        
+        .seconds {
+            background-color: #f3e5f5;
+        }
+        
+        .time-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .time-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .footer-message {
+            font-size: 16px;
+            margin: 30px 0 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #e8f5e9;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .footer-text {
+            margin-bottom: 10px;
+        }
+        
+        .footer-icon {
+            font-size: 60px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: iconFade 1s infinite alternate;
+            opacity: 0;
+        }
+        
+        #footer-cow {
+            left: 20px;
+            color: #8d6e63;
+        }
+        
+        #footer-horse {
+            right: 20px;
+            color: #795548;
+        }
+        
+        @keyframes iconFade {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        .title-icon {
+            font-size: 40px;
+            line-height: 1;
+        }
+        
+        #left-cow {
+            color: #8d6e63;
+        }
+        
+        #right-horse {
+            color: #795548;
+        }
+        
+        .message {
+            font-size: 16px;
+            margin: 20px 0;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: #e8f5e9;
+            display: none;
+            animation: messageFade 5s forwards;
+        }
+        
+        @keyframes messageFade {
+            0% { opacity: 0; display: block; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <div class="title-container">
+                <div class="title-icon" id="left-cow">🐮</div>
+                <h1>牛马上班倒计时</h1>
+                <div class="title-icon" id="right-horse">🐴</div>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <h2>设置下班时间：</h2>
+            <input type="time" id="end-time" required>
+            <button id="start-btn">开始倒计时</button>
+        </div>
+        
+        <div class="countdown-container">
+            <div class="countdown-title">距离下班还有</div>
+            <div class="time-display">
+                <div class="time-block hours">
+                    <div class="time-value" id="hours">--</div>
+                    <div class="time-label">小时</div>
+                </div>
+                <div class="time-block minutes">
+                    <div class="time-value" id="minutes">--</div>
+                    <div class="time-label">分钟</div>
+                </div>
+                <div class="time-block seconds">
+                    <div class="time-value" id="seconds">--</div>
+                    <div class="time-label">秒</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message" id="message"></div>
+        
+        <div class="footer-message">
+            <div class="footer-icon" id="footer-cow">🐮</div>
+            <div class="footer-icon" id="footer-horse">🐴</div>
+            <div class="footer-text">努力工作，快乐生活！记得适当休息哦~</div>
+        </div>
+    </div>
+
+    <script>
+        let countdownInterval;
+        let lastTwoHourEncouragement = null;
+        let startTime = null;
+        
+        // 启动底部牛马交替动画
+        animateFooterIcons();
+        
+        document.getElementById('start-btn').addEventListener('click', startCountdown);
+        
+        function animateFooterIcons() {
+            let counter = 0;
+            setInterval(() => {
+                const cow = document.getElementById('footer-cow');
+                const horse = document.getElementById('footer-horse');
+                
+                if (counter % 2 === 0) {
+                    cow.style.animation = 'iconFade 1.5s infinite alternate';
+                    horse.style.animation = 'none';
+                    horse.style.opacity = '0';
+                } else {
+                    horse.style.animation = 'iconFade 1.5s infinite alternate';
+                    cow.style.animation = 'none';
+                    cow.style.opacity = '0';
+                }
+                
+                counter++;
+            }, 1500);
+        }
+        
+        function startCountdown() {
+            // 清除之前的计时器
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            const endTimeInput = document.getElementById('end-time').value;
+            if (!endTimeInput) {
+                alert('请输入下班时间');
+                return;
+            }
+            
+            // 记录开始时间
+            startTime = new Date();
+            lastTwoHourEncouragement = Math.floor(startTime.getHours() / 2);
+            
+            // 获取当前日期和时间
+            const now = new Date();
+            const [hours, minutes] = endTimeInput.split(':').map(Number);
+            
+            // 设置下班时间（今天）
+            const endTime = new Date();
+            endTime.setHours(hours, minutes, 0, 0);
+            
+            // 如果下班时间已经过了，设置为明天
+            if (endTime <= now) {
+                endTime.setDate(endTime.getDate() + 1);
+            }
+            
+            // 开始倒计时
+            updateCountdown(endTime);
+            countdownInterval = setInterval(() => updateCountdown(endTime), 1000);
+        }
+        
+        function updateCountdown(endTime) {
+            const now = new Date();
+            const diff = endTime - now;
+            
+            // 如果时间到了
+            if (diff <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('hours').textContent = "00";
+                document.getElementById('minutes').textContent = "00";
+                document.getElementById('seconds').textContent = "00";
+                showMessage("下班啦！好好休息吧~");
+                return;
+            }
+            
+            // 计算剩余时间
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            // 显示倒计时
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // 每两小时鼓励
+            const currentTwoHourSegment = Math.floor(now.getHours() / 2);
+            if (lastTwoHourEncouragement !== currentTwoHourSegment) {
+                lastTwoHourEncouragement = currentTwoHourSegment;
+                showMessage("你真棒！又坚持工作了2小时，继续保持！💪");
+            }
+        }
+        
+        function showMessage(text) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = text;
+            messageElement.style.display = "block";
+            
+            // 5秒后自动淡出
+            setTimeout(() => {
+                messageElement.style.display = "none";
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
